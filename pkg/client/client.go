@@ -24,6 +24,7 @@ func NewExcelClient() (*ExcelClient, error) {
 	return &ExcelClient{repository: repository}, nil
 }
 
+// WORKBOOK RELATED FUNCTIONS
 // CreateExcel creates an excel file in the specified folder path with the specified file name and extension
 func (c *ExcelClient) CreateWorkbook(folderPath, fileName, extension, id string) (*models.Workbook, error) {
 	// creates object with metadata
@@ -156,11 +157,62 @@ func (c *ExcelClient) UpdateWorkbook(workbook *models.Workbook) (*models.Workboo
 	return workbook, nil
 }
 
+// SHEET RELATED FUNCTIONS
+func (c *ExcelClient) CreateSheet(workbookID, sheetName string) (*models.Sheet, error) {
+	// get metadata of workbook from db
+	workbook, err := c.repository.GetMetadata(workbookID)
+	if err != nil {
+		fmt.Printf("failed to get metadata: %v", err)
+		return nil, err
+	}
+
+	// check if file exists
+	if _, err := os.Stat(workbook.GetFullPath()); os.IsNotExist(err) {
+		fmt.Printf("file does not exist: %v", err)
+		return nil, err
+	}
+
+	// create sheet
+	pos, err := excel.CreateSheet(*workbook, sheetName)
+	if err != nil {
+		fmt.Printf("failed to create sheet: %v", err)
+		return nil, err
+	}
+
+	// creates sheet object
+	sheet, err := models.NewSheet(pos, sheetName, "")
+	if err != nil {
+		fmt.Printf("failed to create sheet: %v", err)
+		return nil, err
+	}
+
+	// save sheet to db
+	err = c.repository.SaveSheet(sheet)
+	if err != nil {
+		fmt.Printf("failed to save sheet: %v", err)
+		return nil, err
+	}
+
+	return sheet, nil
+}
+
+func (c *ExcelClient) ReadSheet(workbookID, sheetName string) error {
+	panic("not implemented")
+}
+
+func (c *ExcelClient) DeleteSheet(workbookID, sheetName string) error {
+	panic("not implemented")
+}
+
+func (c *ExcelClient) UpdateSheet(workbookID, sheetName string) error {
+	panic("not implemented")
+}
+
+// UTILS
 func (c *ExcelClient) GetExtensions() []string {
 	return excel.GetExtensions()
 }
 
-// debug function to print all metadata
 func (c *ExcelClient) PrintWorkbookList() {
 	c.repository.PrintWorkbookList()
 }

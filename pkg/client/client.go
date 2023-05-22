@@ -25,7 +25,7 @@ func NewExcelClient() (*ExcelClient, error) {
 }
 
 // CreateExcel creates an excel file in the specified folder path with the specified file name and extension
-func (c *ExcelClient) CreateExcel(folderPath, fileName, extension, id string) (*models.Workbook, error) {
+func (c *ExcelClient) CreateWorkbook(folderPath, fileName, extension, id string) (*models.Workbook, error) {
 	// creates object with metadata
 	workbook, err := models.NewWorkbook(fileName, models.Extension(extension), folderPath, id)
 	if err != nil {
@@ -64,7 +64,7 @@ func (c *ExcelClient) CreateExcel(folderPath, fileName, extension, id string) (*
 	return workbook, nil
 }
 
-func (c *ExcelClient) ReadExcel(id string) (*models.Workbook, error) {
+func (c *ExcelClient) ReadWorkbook(id string) (*models.Workbook, error) {
 	// get metadata from db
 	workbook, err := c.repository.GetMetadata(id)
 	if err != nil {
@@ -81,7 +81,7 @@ func (c *ExcelClient) ReadExcel(id string) (*models.Workbook, error) {
 	return workbook, nil
 }
 
-func (c *ExcelClient) DeleteExcel(id string) error {
+func (c *ExcelClient) DeleteWorkbook(id string) error {
 	// get metadata from db
 	workbook, err := c.repository.GetMetadata(id)
 	if err != nil {
@@ -112,7 +112,7 @@ func (c *ExcelClient) DeleteExcel(id string) error {
 	return nil
 }
 
-func (c *ExcelClient) UpdateExcel(workbook *models.Workbook) (*models.Workbook, error) {
+func (c *ExcelClient) UpdateWorkbook(workbook *models.Workbook) (*models.Workbook, error) {
 	// get old metadata from db
 	oldWorkbook, err := c.repository.GetMetadata(workbook.ID)
 	if err != nil {
@@ -124,7 +124,7 @@ func (c *ExcelClient) UpdateExcel(workbook *models.Workbook) (*models.Workbook, 
 	if _, err := os.Stat(oldWorkbook.GetFullPath()); os.IsNotExist(err) {
 		fmt.Printf("file does not exist: %v\n", err)
 		fmt.Printf("creating new file instead\n")
-		workbook, err := c.CreateExcel(workbook.FolderPath, workbook.FileName, string(workbook.Extension), workbook.ID)
+		workbook, err := c.CreateWorkbook(workbook.FolderPath, workbook.FileName, string(workbook.Extension), workbook.ID)
 		if err != nil {
 			fmt.Printf("failed to create new file: %v\n", err)
 			return nil, err

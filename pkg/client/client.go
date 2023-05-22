@@ -14,13 +14,13 @@ type ExcelClient struct {
 	repository *db.WorkbookRepository
 }
 
-func NewExcelClient() *ExcelClient {
+func NewExcelClient() (*ExcelClient, error) {
 	repository, err := db.NewWorkbookRepository()
 	if err != nil {
 		fmt.Printf("failed to create repository: %v", err)
-		panic(err)
+		return nil, err
 	}
-	return &ExcelClient{repository: repository}
+	return &ExcelClient{repository: repository}, nil
 }
 
 // CreateExcel creates an excel file in the specified folder path with the specified file name and extension

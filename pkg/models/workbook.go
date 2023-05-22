@@ -3,7 +3,7 @@ package models
 import (
 	"path/filepath"
 
-	"github.com/Deathfireofdoom/excel-go-client/pkg/utils"
+	"github.com/Deathfireofdoom/excel-client-go/pkg/utils"
 )
 
 type Workbook struct {

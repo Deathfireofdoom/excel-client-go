@@ -11,6 +11,7 @@ type Workbook struct {
 	FileName   string    `json:"file_name"`
 	Extension  Extension `json:"extension"`
 	FolderPath string    `json:"folder_path"`
+	Sheets     []Sheet   `json:"sheets"`
 }
 
 func (e *Workbook) GetFullPath() string {

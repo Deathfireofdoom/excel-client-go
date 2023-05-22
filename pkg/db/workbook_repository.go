@@ -31,17 +31,56 @@ func NewWorkbookRepository() (*WorkbookRepository, error) {
 }
 
 func (r *WorkbookRepository) Initialize() error {
-	_, err := r.DB.Exec("CREATE TABLE IF NOT EXISTS excel_file_metadata (id TEXT PRIMARY KEY UNIQUE, file_name TEXT, extension TEXT, folder_path TEXT, last_modified DATETIME DEFAULT CURRENT_TIMESTAMP)")
+	// create table for workbooks
+	_, err := r.DB.Exec(`
+		CREATE TABLE IF NOT EXISTS workbooks (
+			id              TEXT PRIMARY KEY UNIQUE,
+			file_name       TEXT,
+			extension       TEXT,
+			folder_path     TEXT,
+			last_modified   DATETIME DEFAULT CURRENT_TIMESTAMP
+			)`)
 	if err != nil {
 		return err
 	}
-	// TODO: add table for cell metadata
+
+	// create table for sheets
+	_, err = r.DB.Exec(`
+		CREATE TABLE IF NOT EXISTS sheets (
+			id              TEXT PRIMARY KEY,
+			workbook_id     TEXT,
+			pos             INTEGER,
+			name            TEXT,
+			last_updated_at TIMESTAMP DEAFULT CURRENT_TIMESTAMP,
+			FOREIGN KEY (workbook_id) REFERENCES workbooks(id)
+			)`)
+	if err != nil {
+		return err
+	}
+
+	// create table for cells
+	_, err = r.DB.Exec(`
+		CREATE TABLE IF NOT EXISTS cells (
+			id              TEXT PRIMARY KEY,
+			sheet_id        TEXT,
+			workbook_id     TEXT,
+			row             TEXT,
+			column          INTEGER,
+			value           TEXT,
+			last_updated_at TIMESTAMP DEAFULT CURRENT_TIMESTAMP,
+			FOREIGN KEY (sheet_id) REFERENCES sheets(id),
+			FOREIGN KEY (workbook_id) REFERENCES workbooks(id)
+		)`)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 
 func (r *WorkbookRepository) SaveMetadata(workbook *models.Workbook) error {
 	_, err := r.DB.Exec(`
-	INSERT INTO excel_file_metadata (id, file_name, extension, folder_path)
+	INSERT INTO workbooks (id, file_name, extension, folder_path)
 	VALUES (?, ?, ?, ?)
 	ON CONFLICT (id) DO UPDATE SET
 		file_name = excluded.file_name,
@@ -58,7 +97,7 @@ func (r *WorkbookRepository) GetMetadata(id string) (*models.Workbook, error) {
 	var workbook models.Workbook
 	row := r.DB.QueryRow(`
 	SELECT id, file_name, extension, folder_path
-	FROM excel_file_metadata
+	FROM workbooks
 	WHERE id = ?
 	`, id)
 
@@ -74,7 +113,7 @@ func (r *WorkbookRepository) GetMetadata(id string) (*models.Workbook, error) {
 
 func (r *WorkbookRepository) DeleteMetadata(id string) error {
 	_, err := r.DB.Exec(`
-	DELETE FROM excel_file_metadata
+	DELETE FROM workbooks
 	WHERE id = ?
 	`, id)
 	if err != nil {
@@ -92,7 +131,7 @@ func (r *WorkbookRepository) GetAllWorkbooks() ([]*models.Workbook, error) {
 
 	rows, err := r.DB.Query(`
 	SELECT id, file_name, extension, folder_path
-	FROM excel_file_metadata
+	FROM workbooks
 	`)
 	if err != nil {
 		return nil, fmt.Errorf("failed to retrieve metadata: %v", err)

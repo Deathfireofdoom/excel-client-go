@@ -1,12 +1,13 @@
 package client
 
 import (
-	"deathfireofdoom/excel-go-client/pkg/db"
-	"deathfireofdoom/excel-go-client/pkg/excel"
-	"deathfireofdoom/excel-go-client/pkg/models"
 	"fmt"
 	"os"
 	"path/filepath"
+
+	"github.com/Deathfireofdoom/excel-go-client/pkg/db"
+	"github.com/Deathfireofdoom/excel-go-client/pkg/excel"
+	"github.com/Deathfireofdoom/excel-go-client/pkg/models"
 )
 
 type excelClient struct {

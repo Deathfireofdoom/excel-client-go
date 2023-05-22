@@ -1,8 +1,9 @@
 package models
 
 import (
-	"deathfireofdoom/excel-go-client/pkg/utils"
 	"path/filepath"
+
+	"github.com/Deathfireofdoom/excel-go-client/pkg/utils"
 )
 
 type Workbook struct {

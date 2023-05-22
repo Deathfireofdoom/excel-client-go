@@ -1,9 +1,10 @@
-package db // import "deathfireofdoom/excel-go-client/pkg/db"
+package db // import "github.com/Deathfireofdoom/excel-go-client/pkg/db"
 
 import (
 	"database/sql"
-	"deathfireofdoom/excel-go-client/pkg/models"
 	"fmt"
+
+	"github.com/Deathfireofdoom/excel-go-client/pkg/models"
 
 	_ "github.com/mattn/go-sqlite3"
 )

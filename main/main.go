@@ -1,10 +1,8 @@
 package main
 
-import (
-	// "deathfireofdoom/excel-go-client/pkg/excel"
-	// "deathfireofdoom/excel-go-client/pkg/models"
-	// "fmt"
-)
+// "deathfireofdoom/excel-go-client/pkg/excel"
+// "deathfireofdoom/excel-go-client/pkg/models"
+// "fmt"
 
 func main() {
 	// fmt.Printf("Hello, this is a test to try out the client. Dont mind me.\n")

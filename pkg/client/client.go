@@ -16,6 +16,7 @@ type ExcelClient struct {
 
 func NewExcelClient() (*ExcelClient, error) {
 	repository, err := db.NewWorkbookRepository()
+
 	if err != nil {
 		fmt.Printf("failed to create repository: %v", err)
 		return nil, err

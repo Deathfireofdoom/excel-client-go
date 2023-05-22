@@ -10,21 +10,21 @@ import (
 	"github.com/Deathfireofdoom/excel-client-go/pkg/models"
 )
 
-type excelClient struct {
+type ExcelClient struct {
 	repository *db.WorkbookRepository
 }
 
-func NewExcelClient() *excelClient {
+func NewExcelClient() *ExcelClient {
 	repository, err := db.NewWorkbookRepository()
 	if err != nil {
 		fmt.Printf("failed to create repository: %v", err)
 		panic(err)
 	}
-	return &excelClient{repository: repository}
+	return &ExcelClient{repository: repository}
 }
 
 // CreateExcel creates an excel file in the specified folder path with the specified file name and extension
-func (c *excelClient) CreateExcel(folderPath, fileName, extension, id string) (*models.Workbook, error) {
+func (c *ExcelClient) CreateExcel(folderPath, fileName, extension, id string) (*models.Workbook, error) {
 	// creates object with metadata
 	workbook, err := models.NewWorkbook(fileName, models.Extension(extension), folderPath, id)
 	if err != nil {
@@ -63,7 +63,7 @@ func (c *excelClient) CreateExcel(folderPath, fileName, extension, id string) (*
 	return workbook, nil
 }
 
-func (c *excelClient) ReadExcel(id string) (*models.Workbook, error) {
+func (c *ExcelClient) ReadExcel(id string) (*models.Workbook, error) {
 	// get metadata from db
 	workbook, err := c.repository.GetMetadata(id)
 	if err != nil {
@@ -80,7 +80,7 @@ func (c *excelClient) ReadExcel(id string) (*models.Workbook, error) {
 	return workbook, nil
 }
 
-func (c *excelClient) DeleteExcel(id string) error {
+func (c *ExcelClient) DeleteExcel(id string) error {
 	// get metadata from db
 	workbook, err := c.repository.GetMetadata(id)
 	if err != nil {
@@ -111,7 +111,7 @@ func (c *excelClient) DeleteExcel(id string) error {
 	return nil
 }
 
-func (c *excelClient) UpdateExcel(workbook *models.Workbook) (*models.Workbook, error) {
+func (c *ExcelClient) UpdateExcel(workbook *models.Workbook) (*models.Workbook, error) {
 	// get old metadata from db
 	oldWorkbook, err := c.repository.GetMetadata(workbook.ID)
 	if err != nil {
@@ -155,11 +155,11 @@ func (c *excelClient) UpdateExcel(workbook *models.Workbook) (*models.Workbook, 
 	return workbook, nil
 }
 
-func (c *excelClient) GetExtensions() []string {
+func (c *ExcelClient) GetExtensions() []string {
 	return excel.GetExtensions()
 }
 
 // debug function to print all metadata
-func (c *excelClient) PrintWorkbookList() {
+func (c *ExcelClient) PrintWorkbookList() {
 	c.repository.PrintWorkbookList()
 }

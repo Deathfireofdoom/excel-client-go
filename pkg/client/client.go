@@ -5,9 +5,9 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/Deathfireofdoom/excel-go-client/pkg/db"
-	"github.com/Deathfireofdoom/excel-go-client/pkg/excel"
-	"github.com/Deathfireofdoom/excel-go-client/pkg/models"
+	"github.com/Deathfireofdoom/excel-client-go/pkg/db"
+	"github.com/Deathfireofdoom/excel-client-go/pkg/excel"
+	"github.com/Deathfireofdoom/excel-client-go/pkg/models"
 )
 
 type excelClient struct {

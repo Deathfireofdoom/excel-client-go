@@ -34,7 +34,7 @@ func main() {
 	fmt.Printf("sheet created: %v\n", sheet)
 
 	// // create cell
-	cell, err := excelClient.CreateCell(workbook.ID, sheet.ID, 1, "A", "test_value")
+	cell, err := excelClient.CreateCell(workbook.ID, sheet.ID, 5, "C", "test_value")
 	if err != nil {
 		fmt.Printf("failed to create cell: %v", err)
 		return

@@ -8,12 +8,12 @@ import (
 
 type Cell struct {
 	ID     string      `json:"id"`
-	Row    string      `json:"row"`
-	Column int         `json:"column"`
+	Row    int         `json:"row"`
+	Column string      `json:"column"`
 	Value  interface{} `json:"value"`
 }
 
-func NewCell(row string, column int, value interface{}, id string) (*Cell, error) {
+func NewCell(row int, column string, value interface{}, id string) (*Cell, error) {
 	// generate uuid
 	if id == "" {
 		var err error
@@ -32,5 +32,5 @@ func NewCell(row string, column int, value interface{}, id string) (*Cell, error
 }
 
 func (c *Cell) GetPosition() string {
-	return c.Row + fmt.Sprint(c.Column)
+	return c.Column + fmt.Sprint(c.Row)
 }

@@ -16,7 +16,7 @@ func main() {
 	}
 
 	// test config
-	fileName := "excel_test_file_2"
+	fileName := "excel_test_file_cell"
 	extension := models.Extension("xlsx")
 	filePath := "/Users/oskarelvkull/Documents/test-drive/"
 
@@ -33,21 +33,12 @@ func main() {
 	}
 	fmt.Printf("sheet created: %v\n", sheet)
 
-	// // rename sheet
-	newSheetName := "test_sheet_renamed"
-	sheet.Name = newSheetName
-	_, err = excelClient.UpdateSheet(workbook.ID, sheet)
+	// // create cell
+	cell, err := excelClient.CreateCell(workbook.ID, sheet.ID, 1, "A", "test_value")
 	if err != nil {
-		fmt.Printf("failed to rename sheet: %v", err)
+		fmt.Printf("failed to create cell: %v", err)
 		return
 	}
-	fmt.Printf("sheet renamed: %v\n", newSheetName)
+	fmt.Printf("cell created: %v\n", cell)
 
-	// // delete sheet
-	err = excelClient.DeleteSheet(workbook.ID, sheet.ID)
-	if err != nil {
-		fmt.Printf("failed to delete sheet: %v", err)
-		return
-	}
-	fmt.Printf("sheet deleted: %v\n", newSheetName)
 }

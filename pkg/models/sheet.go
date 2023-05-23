@@ -3,7 +3,8 @@ package models
 import "github.com/Deathfireofdoom/excel-client-go/pkg/utils"
 
 type Sheet struct {
-	ID    string `json:"id"`
+	ID string `json:"id"`
+
 	Pos   int    `json:"pos"`
 	Name  string `json:"name"`
 	Cells []Cell `json:"cells"`

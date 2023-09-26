@@ -56,6 +56,10 @@ func (c *ExcelClient) CreateCell(workbookID, sheetID string, row int, column str
 func (c *ExcelClient) ReadCell(workbookID, sheetID, cellID string) (*models.Cell, error) {
 	// get metadata of workbook from db
 	workbook, err := c.repository.GetMetadata(workbookID)
+	if err != nil {
+		fmt.Printf("failed to get metadata: %v", err)
+		return nil, err
+	}
 
 	// check if file exists
 	if _, err := os.Stat(workbook.GetFullPath()); os.IsNotExist(err) {

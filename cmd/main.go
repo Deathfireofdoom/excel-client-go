@@ -18,7 +18,7 @@ func main() {
 	// test config
 	fileName := "excel_test_file_cell"
 	extension := models.Extension("xlsx")
-	filePath := "/Users/oskarelvkull/Documents/test-drive/"
+	filePath := "./test-output/"
 
 	// // create excel file
 	workbook, _ := excelClient.CreateWorkbook(filePath, fileName, string(extension), "")
@@ -41,4 +41,10 @@ func main() {
 	}
 	fmt.Printf("cell created: %v\n", cell)
 
+	workbook, err = excelClient.ReadWorkbook(workbook.ID)
+	if err != nil {
+		fmt.Printf("failed to read workbook: %v", err)
+		return
+	}
+	fmt.Printf("workbook read: %v\n", workbook)
 }

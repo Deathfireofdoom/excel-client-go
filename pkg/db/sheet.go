@@ -53,12 +53,12 @@ func (r *WorkbookRepository) GetSheet(id string) (*models.Sheet, error) {
 func (r *WorkbookRepository) SaveSheet(sheet *models.Sheet) error {
 	// insert the sheet into the database
 	_, err := r.DB.Exec(`
-	INSERT INTO sheets (id, pos, name)
-	VALUES (?, ?, ?)
+	INSERT INTO sheets (workbook_id, id, pos, name)
+	VALUES (?, ?, ?, ?)
 	ON CONFLICT (id) DO UPDATE SET
 		pos = excluded.pos,
 		name = excluded.name
-	`, sheet.ID, sheet.Pos, sheet.Name)
+	`, sheet.WorkbookID, sheet.ID, sheet.Pos, sheet.Name)
 	if err != nil {
 		return err
 	}

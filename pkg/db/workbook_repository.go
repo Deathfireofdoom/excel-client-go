@@ -51,7 +51,7 @@ func (r *WorkbookRepository) Initialize() error {
 			workbook_id     TEXT,
 			pos             INTEGER,
 			name            TEXT,
-			last_updated_at TIMESTAMP DEAFULT CURRENT_TIMESTAMP,
+			last_updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 			FOREIGN KEY (workbook_id) REFERENCES workbooks(id)
 			)`)
 	if err != nil {
@@ -67,7 +67,7 @@ func (r *WorkbookRepository) Initialize() error {
 			row             TEXT,
 			column          INTEGER,
 			value           TEXT,
-			last_updated_at TIMESTAMP DEAFULT CURRENT_TIMESTAMP,
+			last_updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 			FOREIGN KEY (sheet_id) REFERENCES sheets(id),
 			FOREIGN KEY (workbook_id) REFERENCES workbooks(id)
 		)`)

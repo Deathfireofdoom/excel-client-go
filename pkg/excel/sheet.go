@@ -90,7 +90,7 @@ func GetSheet(workbook models.Workbook, sheetName, sheetID string) (*models.Shee
 	}
 
 	// creates the sheet
-	sheet, err := models.NewSheet(pos, sheetName, sheetID)
+	sheet, err := models.NewSheet(workbook.ID, pos, sheetName, sheetID)
 	if err != nil {
 		return nil, err
 	}

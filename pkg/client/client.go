@@ -166,7 +166,7 @@ func (c *ExcelClient) CreateSheet(workbookID, sheetName string) (*models.Sheet, 
 	}
 
 	// creates sheet object
-	sheet, err := models.NewSheet(pos, sheetName, "")
+	sheet, err := models.NewSheet(workbookID, pos, sheetName, "")
 	if err != nil {
 		fmt.Printf("failed to create sheet: %v", err)
 		return nil, err

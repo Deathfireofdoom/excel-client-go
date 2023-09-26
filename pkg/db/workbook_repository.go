@@ -126,6 +126,70 @@ func (r *WorkbookRepository) Close() {
 	r.DB.Close()
 }
 
+func (r *WorkbookRepository) GetWorkbook(id string) (*models.Workbook, error) {
+	var workbook models.Workbook
+	row := r.DB.QueryRow(`
+    SELECT id, file_name, extension, folder_path
+    FROM workbooks
+    WHERE id = ?
+    `, id)
+
+	err := row.Scan(&workbook.ID, &workbook.FileName, &workbook.Extension, &workbook.FolderPath)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, fmt.Errorf("metadata not found for ID: %s", id)
+		}
+		return nil, fmt.Errorf("failed to retrieve metadata: %v", err)
+	}
+
+	// Get sheets for the workbook
+	rows, err := r.DB.Query(`
+    SELECT id, pos, name
+    FROM sheets
+    WHERE workbook_id = ?
+    `, workbook.ID)
+	if err != nil {
+		return nil, fmt.Errorf("failed to retrieve sheets: %v", err)
+	}
+	defer rows.Close()
+
+	var sheets []models.Sheet
+	for rows.Next() {
+		var sheet models.Sheet
+		err := rows.Scan(&sheet.ID, &sheet.Pos, &sheet.Name)
+		if err != nil {
+			return nil, fmt.Errorf("failed to scan sheet: %v", err)
+		}
+
+		// Get cells for the sheet
+		cellRows, err := r.DB.Query(`
+        SELECT id, row, column, value
+        FROM cells
+        WHERE sheet_id = ?
+        `, sheet.ID)
+		if err != nil {
+			return nil, fmt.Errorf("failed to retrieve cells: %v", err)
+		}
+
+		var cells []models.Cell
+		for cellRows.Next() {
+			var cell models.Cell
+			err := cellRows.Scan(&cell.ID, &cell.Row, &cell.Column, &cell.Value)
+			if err != nil {
+				cellRows.Close() // Important: close before returning
+				return nil, fmt.Errorf("failed to scan cell: %v", err)
+			}
+			cells = append(cells, cell)
+		}
+		cellRows.Close()
+		sheet.Cells = cells
+		sheets = append(sheets, sheet)
+	}
+	workbook.Sheets = sheets
+
+	return &workbook, nil
+}
+
 func (r *WorkbookRepository) GetAllWorkbooks() ([]*models.Workbook, error) {
 	var workbookList []*models.Workbook
 

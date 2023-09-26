@@ -53,7 +53,7 @@ func (c *ExcelClient) CreateWorkbook(folderPath, fileName, extension, id string)
 
 func (c *ExcelClient) ReadWorkbook(id string) (*models.Workbook, error) {
 	// get metadata from db
-	workbook, err := c.repository.GetMetadata(id)
+	workbook, err := c.repository.GetWorkbook(id)
 	if err != nil {
 		fmt.Printf("failed to get metadata: %v", err)
 		return nil, err

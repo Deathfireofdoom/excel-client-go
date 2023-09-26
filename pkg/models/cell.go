@@ -3,9 +3,11 @@ package models
 import (
 	"fmt"
 
+	// Third-party libraries
 	"github.com/Deathfireofdoom/excel-client-go/pkg/utils"
 )
 
+// Cell represents a single cell in a spreadsheet
 type Cell struct {
 	ID     string      `json:"id"`
 	Row    int         `json:"row"`
@@ -13,13 +15,14 @@ type Cell struct {
 	Value  interface{} `json:"value"`
 }
 
+// NewCell creates a new Cell instance.
+// If id is empty, a new UUID will be generated.
 func NewCell(row int, column string, value interface{}, id string) (*Cell, error) {
-	// generate uuid
 	if id == "" {
 		var err error
 		id, err = utils.GenerateUUID()
 		if err != nil {
-			return nil, err
+			return nil, fmt.Errorf("failed to generate UUID for Cell: %w", err)
 		}
 	}
 
@@ -31,6 +34,8 @@ func NewCell(row int, column string, value interface{}, id string) (*Cell, error
 	}, nil
 }
 
+// GetPosition returns the position of the cell as a string,
+// concatenating the column and row information.
 func (c *Cell) GetPosition() string {
 	return c.Column + fmt.Sprint(c.Row)
 }

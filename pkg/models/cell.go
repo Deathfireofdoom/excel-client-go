@@ -9,15 +9,17 @@ import (
 
 // Cell represents a single cell in a spreadsheet
 type Cell struct {
-	ID     string      `json:"id"`
-	Row    int         `json:"row"`
-	Column string      `json:"column"`
-	Value  interface{} `json:"value"`
+	ID         string      `json:"id"`
+	WorkbookID string      `json:"workbook_id"`
+	SheetID    string      `json:"sheet_id"`
+	Row        int         `json:"row"`
+	Column     string      `json:"column"`
+	Value      interface{} `json:"value"`
 }
 
 // NewCell creates a new Cell instance.
 // If id is empty, a new UUID will be generated.
-func NewCell(row int, column string, value interface{}, id string) (*Cell, error) {
+func NewCell(workbook_id string, sheet_id string, row int, column string, value interface{}, id string) (*Cell, error) {
 	if id == "" {
 		var err error
 		id, err = utils.GenerateUUID()
@@ -27,10 +29,12 @@ func NewCell(row int, column string, value interface{}, id string) (*Cell, error
 	}
 
 	return &Cell{
-		ID:     id,
-		Row:    row,
-		Column: column,
-		Value:  value,
+		ID:         id,
+		WorkbookID: workbook_id,
+		SheetID:    sheet_id,
+		Row:        row,
+		Column:     column,
+		Value:      value,
 	}, nil
 }
 

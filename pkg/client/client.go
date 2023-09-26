@@ -312,7 +312,7 @@ func (c *ExcelClient) CreateCell(workbookID, sheetID string, row int, column str
 	}
 
 	// create cell object
-	cell, err := models.NewCell(row, column, value, "")
+	cell, err := models.NewCell(workbookID, sheetID, row, column, value, "")
 	if err != nil {
 		fmt.Printf("failed to create cell: %v", err)
 		return nil, err

@@ -136,9 +136,9 @@ func (c *ExcelClient) DeleteCell(workbookID, sheetID, cellID string) error {
 	return nil
 }
 
-func (c *ExcelClient) UpdateCell(workbookID, sheetID string, cell *models.Cell) (*models.Cell, error) {
+func (c *ExcelClient) UpdateCell(cell *models.Cell) (*models.Cell, error) {
 	// get metadata of workbook from db
-	workbook, err := c.repository.GetMetadata(workbookID)
+	workbook, err := c.repository.GetMetadata(cell.WorkbookID)
 	if err != nil {
 		fmt.Printf("failed to get metadata: %v", err)
 		return nil, err
@@ -151,7 +151,7 @@ func (c *ExcelClient) UpdateCell(workbookID, sheetID string, cell *models.Cell) 
 	}
 
 	// get sheet from db
-	sheet, err := c.repository.GetSheet(sheetID)
+	sheet, err := c.repository.GetSheet(cell.SheetID)
 	if err != nil {
 		fmt.Printf("failed to get sheet: %v", err)
 		return nil, err
